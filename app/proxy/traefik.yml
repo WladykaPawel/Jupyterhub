@@ -1,0 +1,28 @@
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":443"
+  https-test:  # Entrypoint dla portu 8443
+    address: ":8443"
+
+api:
+  dashboard: false
+  insecure: false
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false  # Tylko kontenery z jawnymi etykietami będą obsługiwane
+
+certificatesResolvers:
+  tlsresolver:
+    acme:
+      tlschallenge: true
+      email: marbor@prz.edu.pl
+      storage: /letsencrypt/acme.json
