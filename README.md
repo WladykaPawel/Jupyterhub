@@ -74,12 +74,19 @@ Automatyczne zamykanie nieaktywnych sesji po określonym czasie.
     * Tylko wykładowcy (użytkownicy bez 6-cyfrowego ID) mają dostęp do wolumenu (odczyt-zapis).
     * Studenci nie mają do niego dostępu.
 
+### Wolumen informacyjny (`/home/jovyan/-README-`)
+* **Dostęp dla wszystkich użytkowników**:
+    * Tylko do odczytu (read-only).
+    * Brak możliwości zapisu.
+    * Ścieżka na hoście: `/var/lib/docker/volumes/readme_dir/_data`.
+
 ### Rzeczywiste uprawnienia:
 | Wolumen | Studenci (6-cyfrowe ID) | Wykładowcy (inne ID) |
 | :--- | :---: | :---: |
 | `work` | Odczyt-Zapis | Odczyt-Zapis |
 | `public` | Tylko do odczytu | Tylko do odczytu |
 | `my_public` | Brak dostępu | Odczyt-Zapis |
+| `-README-` | Tylko do odczytu | Tylko do odczytu |
 
 ---
 
@@ -124,7 +131,7 @@ Obecna wersja zawiera wszystkie główne funkcjonalności opisane w dokumentacji
 * Lepsze monitorowanie zasobów
 
 ## Struktura repozytorium
-## Struktura repozytorium
+
 ```
 JupyterHub
 ├── .env
