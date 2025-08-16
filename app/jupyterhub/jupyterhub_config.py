@@ -28,20 +28,31 @@ c.JupyterHub.db_url = "sqlite:////data/jupyterhub.sqlite"
 def is_six_digits_username(username):
     return username[:6].isdigit() and len(username) >= 6
 
+
+# ======================
+# KONFIGURACJA WOLUMENÓW Z WIZUALIZACJĄ
+# ======================
+
 def setup_user_environment(spawner):
     """Ustawia zmienne środowiskowe, volumes i komendę post-start"""
     username = spawner.user.name
     
     # Normalizuj nazwę użytkownika dla wolumenów Dockera
     safe_username = username.replace('@', '-').replace('.', '-')
+    if safe_username.endswith('-stud-prz-edu-pl'):
+        safe_username = safe_username[:-len('-stud-prz-edu-pl')]
+    elif safe_username.endswith('-prz-edu-pl'):
+        safe_username = safe_username[:-len('-prz-edu-pl')]
     
     notebook_dir = os.environ.get("DOCKER_NOTEBOOK_DIR", "/home/jovyan/work")
-    my_public_dir = "/home/jovyan/work/my_public"
-    public_dir = "/home/jovyan/work/public"
+    my_public_dir = "/home/jovyan/work/-my_public-"
+    public_dir = "/home/jovyan/public"
+    readme_dir = "/home/jovyan/-README-"
 
     volumes = {
         f"jupyterhub-user-{safe_username}-work": {"bind": notebook_dir, "mode": "rw"},
-        "jupyterhub-public": {"bind": public_dir, "mode": "ro"}
+        "jupyterhub-public": {"bind": public_dir, "mode": "ro"},
+        "readme_dir": {"bind": readme_dir, "mode": "ro"}
     }
 
     environment = {}

@@ -8,8 +8,8 @@ ARG JUPYTERHUB_VERSION=3.1.1
 
 USER root
 
-RUN mkdir -p /home/jovyan/work/my_public && \
-    chown jovyan:users /home/jovyan/work/my_public
+RUN mkdir -p /home/jovyan/work/-my_public- && \
+    chown jovyan:users /home/jovyan/work/-my_public-
 
 RUN apt-get update && \
     apt-get install -y gnuplot octave wget curl && \

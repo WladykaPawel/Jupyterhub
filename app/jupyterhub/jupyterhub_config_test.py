@@ -3,8 +3,10 @@
 
 import os
 import sys
+import json
 from dockerspawner import DockerSpawner
 import subprocess
+
 
 c = get_config()
 
@@ -32,41 +34,34 @@ c.JupyterHub.db_url = "sqlite:////data/jupyterhub.sqlite"
 def is_six_digits_username(username):
     return username[:6].isdigit() and len(username) >= 6
 
+# ======================
+# KONFIGURACJA WOLUMENÓW Z WIZUALIZACJĄ
+# ======================
 def setup_user_environment(spawner):
-    """Ustawia zmienne środowiskowe, volumes i komendę post-start"""
     username = spawner.user.name
-    notebook_dir = os.environ.get("DOCKER_NOTEBOOK_DIR", "/home/jovyan/work")
-    my_public_dir = "/home/jovyan/work/my_public"
-    public_dir = "/home/jovyan/public"
+    safe_username = username.replace('@', '-').replace('.', '-')
+    
+    if safe_username.endswith('-stud-prz-edu-pl'):
+        safe_username = safe_username[:-len('-stud-prz-edu-pl')]
+    elif safe_username.endswith('-prz-edu-pl'):
+        safe_username = safe_username[:-len('-prz-edu-pl')]
 
+
+    # Konfiguracja wolumenów (bez zmian)
     volumes = {
-        f"jupyterhub-user-{username}-work": {"bind": notebook_dir, "mode": "rw"},
-        "jupyterhub-public": {"bind": public_dir, "mode": "ro"}
+        f"jupyterhub-user-{safe_username}-work": {"bind": "/home/jovyan/work", "mode": "rw"},
+        "jupyterhub-public": {"bind": "/home/jovyan/public", "mode": "ro"},
+        "readme_dir": {"bind": "/home/jovyan/-README-", "mode": "ro"}
     }
 
-    environment = {}
-
     if not is_six_digits_username(username):
-        volumes[f"jupyterhub-user-{username}-my_public"] = {"bind": my_public_dir, "mode": "rw"}
-        environment["JUPYTERHUB_MY_PUBLIC_VOLUME"] = "true"
-
-        #spawner.post_start_cmd = "/usr/local/bin/custom_start.sh"
-    else:
-        environment["JUPYTERHUB_MY_PUBLIC_VOLUME"] = "false"
-         # Dla użytkowników 6-cyfrowych usuń katalog jeśli istnieje
-        spawner.post_start_cmd = f"""
-        /bin/bash -c '
-        if [ -d {my_public_dir} ]; then
-            rm -rf {my_public_dir}
-        fi
-        '
-        """
-
+        volumes[f"jupyterhub-user-{safe_username}-my_public"] = {
+            "bind": "/home/jovyan/work/-my_public-",
+            "mode": "rw"
+        }
     spawner.volumes = volumes
-    spawner.environment = environment
 
 c.Spawner.pre_spawn_hook = setup_user_environment
-
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 
 
