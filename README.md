@@ -39,7 +39,7 @@ Aby uruchomić serwer testowy (niezależnie od produkcyjnego), użyj polecenia:
 docker-compose -f docker-compose.test.yml up -d --build
 ```
 
-Wersja testowa dostępna jest na porcie 8443 pod adresem https://{HOST}:8443.
+Wersja testowa dostępna jest na porcie 8443 pod adresem https://{HOST}:8443/test/.
 
 
 Domyślnie port 80 (HTTP) jest wyłączony, a ruch jest przekierowywany na port 443 (HTTPS).
