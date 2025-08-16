@@ -24,7 +24,7 @@ Przed pierwszym uruchomieniem wymagane jest skonfigurowanie środowiska, główn
 ### Uruchomienie
 Aby uruchomić projekt, skorzystaj z odpowiednich plików docker-compose.yml w zależności od środowiska, którego potrzebujesz.
 
-####Środowisko produkcyjne
+#### Środowisko produkcyjne
 Aby uruchomić serwer produkcyjny, użyj polecenia:
 
 ```bash
@@ -32,7 +32,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 Usługi są dostępne pod adresem https://{HOST} (np. https://jupyterhub.prz.edu.pl).
 
-####Środowisko testowe
+#### Środowisko testowe
 Aby uruchomić serwer testowy (niezależnie od produkcyjnego), użyj polecenia:
 
 ```bash
